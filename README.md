@@ -79,3 +79,167 @@
 --- 
 
 This structure captures the essential concepts of classes, objects, memory allocation, and method parameters in Java.
+
+---
+
+### **The `this` Keyword**
+
+- **Definition**: 
+  - The `this` keyword is used within a method or constructor to refer to the current object, i.e., the object on which the method or constructor was invoked.
+
+  - Example:
+    ```java
+    class Box {
+        int width, height;
+
+        Box(int width, int height) {
+            this.width = width;  // Refers to the instance variable
+            this.height = height; // Refers to the instance variable
+        }
+
+        void displayDimensions() {
+            System.out.println("Width: " + this.width + ", Height: " + this.height);
+        }
+    }
+    ```
+
+---
+
+### **The `final` Keyword**
+
+- **Purpose**: 
+  - Used to declare constants in Java. A field declared as `final` cannot be modified after it is initialized.
+
+- **Usage Example**:
+  ```java
+  final int FILE_OPEN = 2;  // Constant field with all uppercase naming convention
+  ```
+
+- **Immutability for Primitive vs Reference Types**:
+  - For **primitive types**: The value cannot be changed once initialized.
+  - For **reference types**: The reference to the object cannot be changed, but the object’s internal state can still be modified.
+
+  - Example for reference type:
+    ```java
+    final Box box = new Box(5, 10);  // The reference 'box' cannot point to another Box
+    box.width = 20;  // But you can modify the internal state of the Box object
+    ```
+
+---
+
+### **The `finalize()` Method**
+
+- **Purpose**: 
+  - The `finalize()` method is used to perform cleanup actions before an object is reclaimed by the garbage collector.
+
+- **Example**:
+  ```java
+  protected void finalize() {
+      System.out.println("Object is being garbage collected");
+  }
+  ```
+
+- **Note**: This method is rarely used in modern Java programs due to improvements in garbage collection and better alternatives for resource management like `try-with-resources`.
+
+---
+
+### **Constructors in Java**
+
+- **Definition**: 
+  - A **constructor** is a special method that is automatically called when an object is created. It has no return type and is used to initialize objects.
+
+- **Example**:
+  ```java
+  class Box {
+      int width, height;
+
+      // Constructor
+      Box() {
+          width = 10;
+          height = 20;
+          System.out.println("Box Constructor Called");
+      }
+  }
+
+  public class Main {
+      public static void main(String[] args) {
+          Box mybox = new Box();  // Calls the Box() constructor
+      }
+  }
+  ```
+
+---
+
+### **Inheritance and Constructors in Java**
+
+- **Key Points**:
+  - In Java, the constructor of a base class (superclass) is automatically called when an object of the derived class (subclass) is created.
+  - If the base class has no argument constructor, it gets invoked by default.
+  - If the base class has a **parameterized constructor**, the derived class must explicitly call it.
+
+- **Example**:
+
+  ```java
+  class Base {
+      Base() {
+          System.out.println("Base Class Constructor Called");
+      }
+  }
+
+  class Derived extends Base {
+      Derived() {
+          // Automatically calls the Base() constructor
+          System.out.println("Derived Class Constructor Called");
+      }
+  }
+
+  public class Main {
+      public static void main(String[] args) {
+          Derived d = new Derived();  // Creates an instance of Derived, calls both constructors
+      }
+  }
+  ```
+
+  **Output**:
+  ```
+  Base Class Constructor Called
+  Derived Class Constructor Called
+  ```
+
+- **Parameterized Constructor in Base Class**:
+
+  ```java
+  class Base {
+      int value;
+
+      // Parameterized constructor
+      Base(int value) {
+          this.value = value;
+          System.out.println("Base Class Constructor Called with value: " + value);
+      }
+  }
+
+  class Derived extends Base {
+      // Must explicitly call the Base class parameterized constructor
+      Derived(int value) {
+          super(value);  // Call to Base class constructor
+          System.out.println("Derived Class Constructor Called");
+      }
+  }
+
+  public class Main {
+      public static void main(String[] args) {
+          Derived d = new Derived(100);  // Calls parameterized constructor of Base
+      }
+  }
+  ```
+
+  **Output**:
+  ```
+  Base Class Constructor Called with value: 100
+  Derived Class Constructor Called
+  ```
+
+---
+
+This structure provides a comprehensive overview of the `this`, `final`, `finalize()` methods, and the role of constructors and inheritance in Java with code examples to clarify the concepts.
