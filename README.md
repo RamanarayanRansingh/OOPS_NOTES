@@ -452,3 +452,92 @@ Here's a detailed and well-organized note on the `static` keyword in Java, inclu
 ---
 
 This note provides a comprehensive overview of static members in Java, including how they function, examples, and specific rules regarding their usage.
+
+
+### **Singleton Design Pattern in Java**
+
+The Singleton design pattern ensures that a class has only one instance and provides a global point of access to that instance. Here's a detailed breakdown of how the Singleton pattern is implemented in Java, using the provided code as an example:
+
+---
+
+#### **Singleton Class Implementation**
+
+```java
+package com.kunal.singleton;
+
+import com.kunal.access.A;
+
+public class Singleton {
+    // Private constructor to prevent instantiation from outside
+    private Singleton() {
+    }
+
+    // Private static variable to hold the single instance
+    private static Singleton instance;
+
+    // Public static method to provide access to the instance
+    public static Singleton getInstance() {
+        // Create the instance only if it does not exist
+        if (instance == null) {
+            instance = new Singleton();
+        }
+        return instance;
+    }
+}
+```
+
+#### **Key Components**
+
+1. **Private Constructor**:
+   - The constructor `private Singleton()` ensures that the class cannot be instantiated from outside. This is crucial for maintaining a single instance of the class.
+
+2. **Private Static Variable**:
+   - `private static Singleton instance;` is a static variable that holds the single instance of the class. This variable is private to prevent direct access from outside the class.
+
+3. **Public Static Method**:
+   - `public static Singleton getInstance()` is a static method that provides the global access point to the single instance of the class. 
+   - Inside this method, a check is performed to see if the instance is `null`. If it is `null`, a new instance is created and assigned to the `instance` variable.
+   - If the instance already exists, the existing instance is returned.
+
+#### **Usage**
+
+- **Accessing the Singleton Instance**:
+  - To get the single instance of the `Singleton` class, you call `Singleton.getInstance()`.
+  - This method ensures that only one instance of the class is created and reused throughout the application.
+
+#### **Advantages**
+
+- **Controlled Access**: Ensures controlled access to the single instance of the class.
+- **Reduced Memory Usage**: Since only one instance is created, it helps in reducing memory consumption.
+- **Global Access Point**: Provides a global point of access to the instance.
+
+#### **Considerations**
+
+- **Thread Safety**: The given implementation is not thread-safe. In a multi-threaded environment, multiple threads might simultaneously pass the `null` check and create multiple instances. To make it thread-safe, consider using synchronization or the double-checked locking principle.
+
+  ```java
+  public static Singleton getInstance() {
+      if (instance == null) {
+          synchronized (Singleton.class) {
+              if (instance == null) {
+                  instance = new Singleton();
+              }
+          }
+      }
+      return instance;
+  }
+  ```
+
+- **Lazy Initialization**: The instance is created only when `getInstance()` is called for the first time, which is known as lazy initialization.
+
+#### **Real-World Example**
+
+- **Configuration Manager**: Often used in applications where a single configuration manager is needed to handle configuration settings.
+
+#### **Note**
+
+- **Package Import**: The `import com.kunal.access.A;` statement indicates that this class might be using or extending functionality from another class or package. Ensure that `A` is appropriately defined if needed.
+
+---
+
+This note provides a clear explanation of the Singleton design pattern and how it is implemented in Java, along with the provided code example.
