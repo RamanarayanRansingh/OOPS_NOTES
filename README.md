@@ -324,3 +324,131 @@ Here's a detailed and structured note on Java packages, including examples and i
 ---
 
 This note captures the essential aspects of Java packages, including their purpose, file system structure, and how to manage and import them, along with practical examples.
+
+
+Here's a detailed and well-organized note on the `static` keyword in Java, including explanations and code examples:
+
+---
+
+### **Understanding `static` in Java**
+
+- **Definition**:
+  - The `static` keyword in Java is used for creating class-level methods and variables. Static members belong to the class rather than to instances of the class.
+
+- **Characteristics of Static Members**:
+  - **Access**: Static members can be accessed before any objects of the class are created and without reference to any specific object.
+  - **Static Methods**:
+    - Belong to the class, not to any instance.
+    - Can only access other static methods and static variables directly.
+    - Cannot access instance variables or methods.
+    - Cannot use `this` or `super` keywords.
+    - Can be accessed using the class name directly.
+
+- **Example of Static Methods**:
+
+  ```java
+  public class Human {
+      String message = "Hello World";
+
+      public static void display(Human human) {
+          System.out.println(human.message); // Accessing non-static variable through object reference
+      }
+
+      public static void main(String[] args) {
+          Human kunal = new Human();
+          kunal.message = "Kunal's message";
+          Human.display(kunal);
+      }
+  }
+  ```
+
+- **Static Variables**:
+  - Shared among all instances of a class.
+  - Initialized when the class is first loaded.
+
+- **Static Blocks**:
+  - Used for static initialization. Executes once when the class is first loaded.
+
+  ```java
+  class UseStatic {
+      static int a = 3;
+      static int b;
+
+      static void meth(int x) {
+          System.out.println("x = " + x);
+          System.out.println("a = " + a);
+          System.out.println("b = " + b);
+      }
+
+      static {
+          System.out.println("Static block initialized.");
+          b = a * 4;
+      }
+
+      public static void main(String args[]) {
+          meth(42);
+      }
+  }
+  ```
+
+  - **Output**:
+    ```
+    Static block initialized.
+    x = 42
+    a = 3
+    b = 12
+    ```
+
+- **Static Inner Classes**:
+  - Only nested classes can be static.
+  - Static nested classes do not have access to instance variables of the outer class.
+
+  ```java
+  public class Static {
+      static class Test {
+          String name;
+
+          public Test(String name) {
+              this.name = name;
+          }
+      }
+
+      public static void main(String[] args) {
+          Test a = new Test("Kunal");
+          Test b = new Test("Rahul");
+
+          System.out.println(a.name); // Kunal
+          System.out.println(b.name); // Rahul
+      }
+  }
+  ```
+
+- **Key Points**:
+  - Static methods cannot be overridden because method resolution is done at compile-time for static methods.
+  - Static interface methods are not inherited by implementing classes or sub-interfaces.
+  - Static inner classes are not associated with an instance of the outer class and do not have access to its instance members.
+
+- **Note on Static Classes**:
+  - Only nested classes can be static. Static nested classes can have static variables and methods.
+
+  ```java
+  public class StaticDemo {
+      // Static inner class
+      static class InnerStatic {
+          static int staticVar = 10;
+
+          static void staticMethod() {
+              System.out.println("Static Method in InnerStatic");
+          }
+      }
+
+      public static void main(String[] args) {
+          InnerStatic.staticMethod(); // Access static method directly
+          System.out.println("Static Variable: " + InnerStatic.staticVar); // Access static variable directly
+      }
+  }
+  ```
+
+---
+
+This note provides a comprehensive overview of static members in Java, including how they function, examples, and specific rules regarding their usage.
