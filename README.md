@@ -1269,3 +1269,140 @@ class Airplane implements Flyable {
 - **Use an interface** when you want to specify that a class must implement certain behaviors, without enforcing how those behaviors are implemented.
 
 These tools are essential for creating flexible, reusable, and maintainable code in Java.
+
+
+
+In Java, multiple inheritance is not allowed for classes, meaning a class cannot directly inherit from more than one class. This is to avoid issues such as the "diamond problem," where two parent classes might provide different implementations of the same method, leading to ambiguity for the subclass.
+
+### Java's Solution: Interfaces
+
+To achieve multiple inheritance of behavior, Java uses **interfaces**. Unlike classes, interfaces allow a class to "inherit" abstract method signatures from multiple sources. Here's how interfaces work:
+
+- **Interface Basics**: An interface is a reference type, similar to a class, but it can only contain method signatures (abstract methods) and constants (static final variables). All methods in an interface are implicitly `public` and `abstract`, and all variables are `public`, `static`, and `final`.
+
+- **Differences from Classes**:
+  - A class can have state (through instance variables), but an interface cannot.
+  - A class can implement multiple interfaces, allowing for multiple inheritance of types.
+  
+### Key Points About Interfaces:
+1. **Abstract Methods**: All methods in an interface are abstract by default (without implementation), but starting from Java 8, interfaces can include **default methods** and **static methods** with actual implementations.
+   
+2. **Final and Static Variables**: Variables declared in an interface are implicitly `final` and `static`, meaning they are constants and shared across all instances of implementing classes.
+
+3. **Class vs Interface**:
+   - A class can maintain state and define both abstract and concrete methods.
+   - An interface defines behavior without specifying how that behavior is implemented. Classes that implement an interface are responsible for providing the method bodies.
+   
+4. **Multiple Inheritance with Interfaces**: 
+   - A class can only extend one other class, but it can implement multiple interfaces. This allows a class to inherit behaviors from multiple sources while avoiding ambiguity found in multiple class inheritance.
+   
+5. **Default Methods (Java 8+)**: An interface can provide a default implementation of a method using the `default` keyword. This allows interfaces to evolve by adding new methods without breaking existing code that implements the interface.
+   
+6. **Static Methods in Interfaces**: Starting with Java 8, interfaces can also have static methods with bodies, but these methods are not inherited by implementing classes or subinterfaces.
+
+### Example: Interface in Action
+
+```java
+interface A {
+    // abstract method
+    void doSomething();
+    
+    // default method
+    default String getDefault() {
+        return "Default implementation";
+    }
+    
+    // static method
+    static String getStatic() {
+        return "Static method in interface";
+    }
+}
+
+class B implements A {
+    // overriding the abstract method
+    public void doSomething() {
+        System.out.println("Doing something in class B");
+    }
+    
+    // class B can call the default method if not overridden
+}
+
+public class InterfaceDemo {
+    public static void main(String[] args) {
+        B b = new B();
+        b.doSomething(); // Calls B's implementation
+        System.out.println(b.getDefault()); // Calls default implementation from interface A
+        System.out.println(A.getStatic()); // Calls static method from interface A
+    }
+}
+```
+
+### Nested Interfaces:
+- **Nested Interface**: You can define an interface inside a class or another interface. Nested interfaces can have any access modifier (`public`, `private`, etc.), unlike top-level interfaces, which must either be `public` or use the default package access.
+
+Example:
+
+```java
+class OuterClass {
+    // Nested interface
+    public interface NestedInterface {
+        boolean isPositive(int x);
+    }
+}
+
+class InnerClass implements OuterClass.NestedInterface {
+    public boolean isPositive(int x) {
+        return x > 0;
+    }
+}
+
+public class NestedInterfaceDemo {
+    public static void main(String[] args) {
+        OuterClass.NestedInterface obj = new InnerClass();
+        System.out.println(obj.isPositive(10));  // Outputs: true
+    }
+}
+```
+
+### Multiple Inheritance Conflict:
+If a class implements two interfaces that have the same default method, the implementing class must override that method to avoid ambiguity.
+
+```java
+interface X {
+    default void method() {
+        System.out.println("Interface X");
+    }
+}
+
+interface Y {
+    default void method() {
+        System.out.println("Interface Y");
+    }
+}
+
+class Z implements X, Y {
+    // Must override the conflicting method
+    public void method() {
+        System.out.println("Class Z overrides method");
+    }
+}
+
+public class MultipleInheritanceDemo {
+    public static void main(String[] args) {
+        Z obj = new Z();
+        obj.method();  // Output: Class Z overrides method
+    }
+}
+```
+
+### Summary of Abstract Class vs Interface:
+
+| Feature               | Abstract Class                                   | Interface                                |
+|-----------------------|-------------------------------------------------|------------------------------------------|
+| Methods               | Can have both abstract and concrete methods     | Can have only abstract methods (Java 8+: default and static methods allowed) |
+| Variables             | Can have instance variables, static and non-static variables | Only static and final variables          |
+| Inheritance           | Can extend one class                            | Can implement multiple interfaces        |
+| Constructors          | Can have constructors                           | Cannot have constructors                 |
+| Multiple Inheritance  | Not supported                                   | Supported via multiple interfaces        |
+
+Interfaces provide a flexible mechanism for defining shared behavior across different classes, while avoiding the complexity of multiple inheritance.
