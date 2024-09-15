@@ -1407,6 +1407,7 @@ public class MultipleInheritanceDemo {
 
 Interfaces provide a flexible mechanism for defining shared behavior across different classes, while avoiding the complexity of multiple inheritance.
 
+---
 
 In Java, **enumerations (enums)** represent a list of named constants, but unlike in other languages, enums in Java are much more powerful because they define a class type. This capability allows enums to have additional functionality such as fields, methods, and constructors. Here’s a breakdown of important concepts and capabilities of enums in Java:
 
@@ -1597,3 +1598,71 @@ Static methods in enums must have a body, and they are **not inherited** by impl
 - Enums provide strong type safety and are ideal for representing a fixed set of constants.
 
 Enums are not just constants; they allow the representation of behaviors alongside constant values, giving more flexibility to how we use them in Java programs.
+
+
+---
+
+Here are a few additional points you can add to your cheat sheet to cover some common interview topics that could be beneficial:
+
+### 1. **Getters and Setters**:
+- **Definition**: Getters and setters are methods used to access and modify private fields of a class.
+- **Usage**:  
+  - **Getter**: Returns the value of a private attribute.
+    ```java
+    public String getName() {
+        return this.name;
+    }
+    ```
+  - **Setter**: Sets the value of a private attribute.
+    ```java
+    public void setName(String name) {
+        this.name = name;
+    }
+    ```
+- **Encapsulation**: These methods support **encapsulation**, by allowing controlled access to class attributes.
+
+### 2. **Polymorphism in Practice**:
+- **Method Overloading**: Multiple methods with the same name but different parameters (compile-time polymorphism).
+- **Method Overriding**: Subclass provides a specific implementation for a method that is already defined in its superclass (runtime polymorphism).
+
+### 3. **"IS-A" vs "HAS-A" Relationships**:
+- **IS-A**: Inheritance; example: a `Dog` IS-A `Animal`.
+- **HAS-A**: Composition; example: a `Car` HAS-A `Engine`.
+
+### 4. **SOLID Principles**:
+- **Single Responsibility Principle**: A class should have one, and only one, reason to change.
+- **Open/Closed Principle**: Software entities should be open for extension but closed for modification.
+- **Liskov Substitution Principle**: Subtypes should be substitutable for their base types without affecting correctness.
+- **Interface Segregation Principle**: No client should be forced to depend on methods it does not use.
+- **Dependency Inversion Principle**: High-level modules should not depend on low-level modules. Both should depend on abstractions.
+
+### 5. **Object Cloning**:
+- **Shallow Copy**: Copies the fields of an object but does not copy objects referenced by those fields.
+- **Deep Copy**: Copies the fields of an object and all objects referenced by those fields, creating an independent object.
+
+### 6. **Exception Handling**:
+- **Checked Exceptions**: Must be handled at compile-time.
+- **Unchecked Exceptions**: Errors that occur at runtime.
+- **Commonly Asked**: Explain how exceptions like `NullPointerException`, `IndexOutOfBoundsException`, and `IOException` work.
+
+### 7. **Common Design Patterns**:
+- **Singleton**: Ensures a class has only one instance.
+- **Factory**: Creates objects without exposing the instantiation logic.
+- **Observer**: Defines a one-to-many dependency between objects.
+- **Decorator**: Dynamically adds functionality to an object without affecting other objects.
+
+### 8. **Final Keyword**:
+- **Final Class**: Cannot be subclassed.
+- **Final Method**: Cannot be overridden by subclasses.
+- **Final Variables**: Its value cannot be changed once initialized.
+
+### 9. **Static Methods and Variables**:
+- **Static Variables**: Shared across all instances of a class.
+- **Static Methods**: Can be called without creating an instance of the class.
+
+### 10. **String vs StringBuilder vs StringBuffer**:
+- **String**: Immutable, meaning any change creates a new string object.
+- **StringBuilder**: Mutable, used when modifications are needed, not thread-safe.
+- **StringBuffer**: Mutable, thread-safe, used in multi-threaded environments.
+
+These are a few important topics to enhance your cheat sheet. Let me know if you'd like more examples or detailed notes on any of these!
