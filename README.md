@@ -1406,3 +1406,194 @@ public class MultipleInheritanceDemo {
 | Multiple Inheritance  | Not supported                                   | Supported via multiple interfaces        |
 
 Interfaces provide a flexible mechanism for defining shared behavior across different classes, while avoiding the complexity of multiple inheritance.
+
+
+In Java, **enumerations (enums)** represent a list of named constants, but unlike in other languages, enums in Java are much more powerful because they define a class type. This capability allows enums to have additional functionality such as fields, methods, and constructors. Here’s a breakdown of important concepts and capabilities of enums in Java:
+
+### Basic Enum Declaration
+Enums are defined using the `enum` keyword and can exist either **inside** or **outside** a class but not within methods.
+
+```java
+enum Color {
+    RED, BLUE, GREEN;
+}
+
+public class EnumExample {
+    public static void main(String[] args) {
+        Color c1 = Color.RED;
+        System.out.println(c1); // Output: RED
+    }
+}
+```
+
+### How Enums Work Internally
+Internally, enums are implemented as a class, where each constant is an instance of that class.
+
+```java
+// Equivalent internal representation of enum Color
+class Color {
+    public static final Color RED = new Color();
+    public static final Color BLUE = new Color();
+    public static final Color GREEN = new Color();
+}
+```
+
+### Enum and Inheritance
+- Enums **implicitly extend** `java.lang.Enum`, which means they cannot extend any other class. Java does not support multiple inheritance, so enums cannot be a superclass either.
+- However, enums **can implement interfaces**, which allows them to behave polymorphically.
+  
+### Enum Methods: `values()`, `ordinal()`, `valueOf()`
+1. **`values()`**: This method returns an array of all enum constants.
+   ```java
+   for (Color color : Color.values()) {
+       System.out.println(color);
+   }
+   ```
+2. **`ordinal()`**: This returns the position (index) of the enum constant, starting from zero.
+   ```java
+   Color c1 = Color.RED;
+   System.out.println(c1.ordinal()); // Output: 0
+   ```
+3. **`valueOf(String name)`**: This method returns the enum constant matching the string provided.
+   ```java
+   Color c2 = Color.valueOf("BLUE");
+   System.out.println(c2); // Output: BLUE
+   ```
+
+### Enum Constructors
+Enums can have constructors, but they are **implicitly private or package-private**. You cannot create new instances of enum outside the enum definition.
+
+```java
+enum Fruit {
+    APPLE(100), BANANA(80), ORANGE(90);
+
+    private int price;
+
+    // Enum constructor
+    Fruit(int price) {
+        this.price = price;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+}
+
+public class EnumConstructorExample {
+    public static void main(String[] args) {
+        System.out.println(Fruit.APPLE.getPrice()); // Output: 100
+    }
+}
+```
+- **Why are enum constructors private?**: To prevent creating new instances, since enum constants are single instances and represent a fixed set of values.
+
+### Enum Methods and `toString()`
+Enums can contain **concrete methods** but no abstract methods. The `toString()` method in `java.lang.Enum` is overridden to return the constant name.
+
+```java
+enum Status {
+    STARTED, IN_PROGRESS, COMPLETED;
+
+    public void display() {
+        System.out.println("Current Status: " + this);
+    }
+}
+
+public class EnumMethodExample {
+    public static void main(String[] args) {
+        Status s1 = Status.IN_PROGRESS;
+        s1.display(); // Output: Current Status: IN_PROGRESS
+    }
+}
+```
+
+### Enum Comparison
+- You can compare two enum constants using the `==` operator, as they are single instances (singletons).
+  
+  ```java
+  if (Color.RED == Color.BLUE) {
+      System.out.println("Different colors");
+  } else {
+      System.out.println("Same color");
+  }
+  ```
+  
+- **`equals()`**: You can also compare two enum constants using `equals()`, but they will only be considered equal if they belong to the same enum and refer to the same constant.
+
+### Enum with `main()` Method
+You can have a `main()` method within an enum and invoke it directly from the command line.
+
+```java
+enum TestEnum {
+    RED, BLUE;
+
+    public static void main(String[] args) {
+        System.out.println("Enum main method invoked");
+        for (TestEnum t : TestEnum.values()) {
+            System.out.println(t);
+        }
+    }
+}
+```
+To run:
+```bash
+javac TestEnum.java
+java TestEnum
+```
+
+### Nested Enums
+You can declare an enum inside a class or even inside another enum, known as **nested enums**. However, enums declared within a class can have any access modifier (public, private, protected), but top-level enums can only be public or package-private.
+
+```java
+class OuterClass {
+    enum Day {
+        MONDAY, TUESDAY, WEDNESDAY;
+    }
+}
+
+public class NestedEnumExample {
+    public static void main(String[] args) {
+        OuterClass.Day day = OuterClass.Day.MONDAY;
+        System.out.println(day);  // Output: MONDAY
+    }
+}
+```
+
+### Enum Implementing Interfaces
+Enums can implement interfaces, allowing them to define behavior across enum constants.
+
+```java
+interface Printable {
+    void print();
+}
+
+enum Shape implements Printable {
+    CIRCLE, SQUARE;
+
+    @Override
+    public void print() {
+        System.out.println(this + " Shape");
+    }
+}
+
+public class EnumWithInterfaceExample {
+    public static void main(String[] args) {
+        Shape.CIRCLE.print(); // Output: CIRCLE Shape
+    }
+}
+```
+
+### Default Enum Method Priority
+If a class implements two interfaces that define the same default method, the class must override it. However, in case one interface extends another, the most derived version of the default method takes precedence.
+
+### Static Methods in Enums
+Static methods in enums must have a body, and they are **not inherited** by implementing classes or subinterfaces.
+
+### Summary of Enums in Java:
+- Enums in Java are more powerful than basic enumerations found in other languages, as they can contain fields, methods, and constructors.
+- They **implicitly extend** `java.lang.Enum`, meaning they cannot extend other classes.
+- They can implement interfaces, and each enum constant can hold specific behavior.
+- Enum methods include `values()`, `ordinal()`, and `valueOf()`.
+- Enums provide strong type safety and are ideal for representing a fixed set of constants.
+
+Enums are not just constants; they allow the representation of behaviors alongside constant values, giving more flexibility to how we use them in Java programs.
