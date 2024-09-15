@@ -792,3 +792,194 @@ class RetOb {
 - **Garbage Collection**: When no references to an object remain, it is eligible for garbage collection, and its memory is freed.
 
 These concepts are crucial for writing efficient, flexible, and reusable code in Java.
+
+
+
+### **Method Overriding in Java**
+
+Method overriding occurs when a subclass defines a method with the same name, return type, and parameters as a method in its superclass. The overridden method in the subclass hides the method in the superclass. When the method is called using a subclass object, the subclass version is executed, even if the reference is of the superclass type.
+
+---
+
+#### **Key Concepts of Method Overriding**:
+1. **Same Name, Return Type, and Parameters**: The method in the subclass must have the exact same name, return type, and parameters as the method in the superclass.
+   
+2. **Method Resolution at Runtime**: Overridden methods are resolved at runtime using **dynamic method dispatch**, which allows Java to achieve **runtime polymorphism**.
+
+3. **Superclass Reference to Subclass Object**: A reference variable of the superclass can point to an object of the subclass. The actual method executed depends on the object type, not the reference type.
+
+4. **Return Type in Overriding**: In overriding, the return type must be the same or a **covariant return type** (a subclass of the return type of the overridden method).
+
+---
+
+#### **Example: Method Overriding in Java**
+
+Let's look at an example where a method in a subclass overrides a method in its superclass:
+
+```java
+// Superclass
+class A {
+    // Method to be overridden
+    void display() {
+        System.out.println("Display from class A");
+    }
+}
+
+// Subclass
+class B extends A {
+    // Overriding the display method
+    @Override
+    void display() {
+        System.out.println("Display from class B");
+    }
+}
+
+class TestOverride {
+    public static void main(String[] args) {
+        A a = new A();     // Reference and object of class A
+        B b = new B();     // Reference and object of class B
+        A ref;             // Reference variable of type A
+
+        ref = a;           // ref refers to object of class A
+        ref.display();     // Calls A's display method
+
+        ref = b;           // ref refers to object of class B (upcasting)
+        ref.display();     // Calls B's display method (overridden)
+    }
+}
+```
+
+**Explanation**:
+- The `display()` method in class `B` overrides the `display()` method in class `A`.
+- When the reference `ref` of type `A` refers to an object of class `B`, the overridden `display()` method in `B` is called.
+
+**Output**:
+```
+Display from class A
+Display from class B
+```
+
+---
+
+### **Dynamic Method Dispatch**
+
+Dynamic method dispatch is the process through which Java resolves calls to overridden methods at **runtime**. The decision on which method to execute depends on the actual object type that the reference points to, rather than the reference type itself.
+
+---
+
+#### **Key Concepts of Dynamic Method Dispatch**:
+1. **Runtime Polymorphism**: Dynamic method dispatch allows for polymorphic behavior, meaning the same method call can invoke different method versions depending on the actual object type at runtime.
+   
+2. **Superclass Reference**: A superclass reference can refer to any object of a subclass. When a method is called using this reference, the method of the actual object's class is invoked.
+
+---
+
+#### **Example: Dynamic Method Dispatch in Java**
+
+```java
+// Superclass
+class A {
+    // Method to be overridden
+    void display() {
+        System.out.println("Display from class A");
+    }
+}
+
+// Subclass
+class B extends A {
+    // Overriding the display method
+    @Override
+    void display() {
+        System.out.println("Display from class B");
+    }
+}
+
+// Another Subclass
+class C extends A {
+    // Overriding the display method
+    @Override
+    void display() {
+        System.out.println("Display from class C");
+    }
+}
+
+class TestDynamicDispatch {
+    public static void main(String[] args) {
+        A ref;  // Superclass reference
+
+        B objB = new B();
+        C objC = new C();
+
+        // Dynamic method dispatch
+        ref = objB;  // ref refers to an object of type B
+        ref.display();  // Calls B's display method
+
+        ref = objC;  // ref refers to an object of type C
+        ref.display();  // Calls C's display method
+    }
+}
+```
+
+**Explanation**:
+- A superclass reference (`ref`) is used to point to objects of different subclasses (`B` and `C`).
+- The `display()` method that gets invoked depends on the object (`objB` or `objC`) that the reference points to at runtime.
+
+**Output**:
+```
+Display from class B
+Display from class C
+```
+
+---
+
+### **Overriding with Covariant Return Types**
+
+In method overriding, the return type of the overridden method in the subclass can be a subclass of the return type in the superclass. This is called a **covariant return type**.
+
+---
+
+#### **Example: Covariant Return Type in Overriding**
+
+```java
+// Superclass
+class A {
+    A display() {
+        System.out.println("Display from class A");
+        return this;
+    }
+}
+
+// Subclass
+class B extends A {
+    @Override
+    B display() {
+        System.out.println("Display from class B");
+        return this;
+    }
+}
+
+class TestCovariantReturn {
+    public static void main(String[] args) {
+        B b = new B();
+        b.display();  // Calls B's display method
+    }
+}
+```
+
+**Explanation**:
+- In class `A`, the `display()` method returns an object of type `A`.
+- In class `B`, the overridden `display()` method returns an object of type `B`, which is allowed because `B` is a subclass of `A`.
+
+**Output**:
+```
+Display from class B
+```
+
+---
+
+### **Summary**:
+- **Method Overriding**: When a subclass provides a specific implementation of a method that is already defined in its superclass.
+- **Dynamic Method Dispatch**: The process through which the overridden method to be executed is determined at runtime based on the object's type.
+- **Covariant Return Types**: In method overriding, the return type can be a subclass of the return type declared in the superclass method.
+
+This enables Java's powerful runtime polymorphism, allowing methods to behave differently based on the actual object type at runtime.
