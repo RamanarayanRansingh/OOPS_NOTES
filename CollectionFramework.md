@@ -254,9 +254,7 @@ treeMap.put(2, "Two");  // Output: [1=One, 2=Two, 3=Three] (sorted by keys)
 ## **7. Differences Between Important Collections**
 
 ### **7.1 ArrayList vs LinkedList**
-- **Array
-
-List**: Better for random access, slow for insertions/deletions.
+- **ArrayList**: Better for random access, slow for insertions/deletions.
 - **LinkedList**: Efficient for insertions/deletions, slower for random access.
 
 ### **7.2 HashSet vs TreeSet**
