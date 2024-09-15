@@ -541,3 +541,142 @@ public class Singleton {
 ---
 
 This note provides a clear explanation of the Singleton design pattern and how it is implemented in Java, along with the provided code example.
+
+
+### **Inheritance in Java**
+
+Inheritance is a fundamental concept in Java that allows one class to inherit the properties and behaviors (fields and methods) of another class. Here's a breakdown of key concepts related to inheritance, including the use of `extends`, `super`, and `final`.
+
+---
+
+#### **Basic Inheritance Syntax**
+In Java, inheritance is achieved using the `extends` keyword:
+
+```java
+class Subclass extends Superclass {
+    // body of class
+}
+```
+
+- **Subclass**: The class that inherits from another class.
+- **Superclass**: The class being inherited from.
+- A subclass can inherit only one superclass (Java does not support multiple inheritance directly).
+
+#### **Superclasses and Subclass Access**
+- While a subclass inherits all the fields and methods of a superclass, it **cannot access private members** of the superclass directly.
+- **Superclass Reference to Subclass Object**: You can assign a subclass object to a superclass reference, but the reference can only access methods and fields defined in the superclass.
+
+  ```java
+  Superclass ref = new Subclass(); // ref can only access superclass methods.
+  ```
+
+#### **Using `super` Keyword**
+
+`super` is used to:
+1. Call the **superclass constructor**.
+2. Access a **superclass method** or field that is hidden by the subclass.
+
+- **Calling a Superclass Constructor**: If a subclass needs to initialize fields from the superclass, it can call the superclass constructor using `super`.
+
+  ```java
+  class BoxWeight extends Box {
+      double weight;
+
+      BoxWeight(double w, double h, double d, double m) {
+          super(w, h, d); // Call superclass constructor
+          weight = m;
+      }
+  }
+  ```
+
+- **Accessing Superclass Methods or Fields**: When a subclass hides a superclass member with the same name, you can use `super` to refer to the superclass version.
+
+  ```java
+  super.member; // Access the superclass method or field.
+  ```
+
+#### **Multilevel Hierarchy**
+In a multilevel class hierarchy, `super()` always refers to the constructor of the immediate superclass. Each constructor in the chain must call the constructor of its superclass.
+
+```java
+class Box {
+    private double width, height, depth;
+
+    Box(double w, double h, double d) {
+        width = w;
+        height = h;
+        depth = d;
+    }
+}
+
+class BoxWeight extends Box {
+    double weight;
+
+    BoxWeight(double w, double h, double d, double m) {
+        super(w, h, d); // Call Box constructor
+        weight = m;
+    }
+}
+```
+
+#### **Key Points About `super()`**
+- **super()** must be the first statement in the subclass constructor if used.
+- If a superclass constructor requires parameters, the subclass must pass them via `super()`.
+
+#### **`final` Keyword**
+
+The `final` keyword can be used with methods and classes to prevent further inheritance or modification.
+
+1. **Prevent Overriding**: Marking a method as `final` prevents subclasses from overriding it.
+
+   ```java
+   final void show() {
+       // cannot be overridden
+   }
+   ```
+
+2. **Prevent Inheritance**: Marking a class as `final` prevents it from being extended.
+
+   ```java
+   final class MyClass {
+       // no other class can extend MyClass
+   }
+   ```
+
+3. **Performance**: Declaring methods as `final` allows for **early binding** (method calls resolved at compile time), improving performance through inlining.
+
+4. **Note on Static Methods**: Static methods are class-level and are not subject to overriding. Thus, polymorphism does not apply to static methods.
+
+#### **Important Notes**
+
+- **Polymorphism**: In Java, polymorphism applies to methods, not fields. Thus, instance variables are not subject to polymorphism.
+- **Default Constructor**: If `super()` is not used, the default or parameterless constructor of each superclass is called automatically.
+
+#### **Example**
+
+```java
+class Box {
+    private double width, height, depth;
+
+    Box(Box ob) { // Constructor with object parameter
+        width = ob.width;
+        height = ob.height;
+        depth = ob.depth;
+    }
+}
+
+class BoxWeight extends Box {
+    double weight;
+
+    BoxWeight(BoxWeight ob) {
+        super(ob); // Call superclass constructor
+        weight = ob.weight;
+    }
+}
+```
+
+In the above code, `super(ob)` calls the `Box` constructor, passing a `BoxWeight` object, which invokes the constructor of the superclass.
+
+---
+
+By understanding these core concepts, you can effectively utilize inheritance, `super`, and `final` in Java to build efficient and scalable object-oriented programs.
