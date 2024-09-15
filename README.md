@@ -983,3 +983,172 @@ Display from class B
 - **Covariant Return Types**: In method overriding, the return type can be a subclass of the return type declared in the superclass method.
 
 This enables Java's powerful runtime polymorphism, allowing methods to behave differently based on the actual object type at runtime.
+
+
+### **Access Control in Java**
+
+Access control in Java is determined by **access modifiers** that specify the visibility of class members (fields and methods) across different contexts (classes, packages, and subclasses). The four main access levels are **public**, **protected**, **private**, and **default (no modifier)**.
+
+---
+
+### **Access Modifier Levels**:
+Here’s a breakdown of access levels across different contexts:
+
+| Modifier   | Class  | Package | Subclass (same pkg) | Subclass (diff pkg) | World |
+|------------|--------|---------|---------------------|---------------------|-------|
+| **public** |   +    |    +    |          +          |          +          |   +   |
+| **protected** |  +   |    +    |          +          |          +          |       |
+| **no modifier (default)** | + |    +    |          +          |                     |       |
+| **private** |   +    |         |                     |                     |       |
+
+- `+` means accessible
+- Blank means not accessible
+
+---
+
+### **Understanding Access Modifiers**:
+
+1. **`public`**:
+   - Accessible from **anywhere** (within the same class, package, subclass, or any other class in different packages).
+
+2. **`protected`**:
+   - Accessible within the same class, package, and by subclasses, even if they are in different packages. However, the member can only be accessed by subclass objects, not by instances of the superclass from a different package.
+
+3. **`default (no modifier)`**:
+   - Accessible only within the **same package** (package-private). Not accessible from outside the package, even by subclasses.
+
+4. **`private`**:
+   - Accessible only within the **same class**. Not visible to other classes, subclasses, or outside packages.
+
+---
+
+### **Example of Access Control**:
+
+Here’s a practical example of how **protected** access works in the context of different packages and inheritance.
+
+```java
+// packageOne/Base.java
+package packageOne;
+
+public class Base {
+    protected void display() {
+        System.out.println("in Base");
+    }
+}
+
+// packageTwo/Derived.java
+package packageTwo;
+import packageOne.Base;
+
+public class Derived extends Base {
+    public void show() {
+        // this is allowed, because we're in the subclass
+        display(); // Directly calling the inherited protected method
+
+        // this is allowed, because the method is being called on a Derived object
+        new Derived().display();
+
+        // this is NOT allowed, because we're creating an instance of Base (superclass),
+        // and outside of packageOne, the protected method cannot be called using a superclass reference
+        // new Base().display(); // Compile-time error!
+    }
+}
+```
+
+#### **Explanation**:
+- **`display()` (direct call)**: This works because it is being called from within the subclass (`Derived`), and the `protected` method is inherited.
+- **`new Derived().display()`**: This works because the method is called on an instance of `Derived`, and `Derived` has access to the `protected` method of its superclass.
+- **`new Base().display()`**: This does **not work** because you are trying to access a `protected` method through a `Base` instance outside the `packageOne`. Even though `Derived` extends `Base`, the `protected` access does not apply to superclass instances from outside the package.
+
+---
+
+### **Protected Access with Subclass Objects**:
+
+Protected members can be accessed from a subclass, but only through an instance of the subclass. The access to protected members of an instance of the superclass from outside the package is not allowed.
+
+#### **Example**:
+
+```java
+// packageOne/C.java
+package packageOne;
+
+public class C {
+    protected String message = "Protected message from class C";
+}
+
+// packageTwo/S.java
+package packageTwo;
+import packageOne.C;
+
+public class S extends C {
+    public void accessProtected(C obj) {
+        // This works because 'message' is inherited by the S class
+        System.out.println(this.message); // Accessing inherited protected member
+
+        // This DOES NOT work because 'obj' is of type C, and we cannot access protected members through
+        // superclass instances outside the package.
+        // System.out.println(obj.message); // Compile-time error!
+    }
+
+    public static void main(String[] args) {
+        S sObj = new S();
+        C cObj = new C();
+
+        sObj.accessProtected(cObj);  // Direct access to protected member via inheritance
+    }
+}
+```
+
+#### **Explanation**:
+- The `message` field in class `C` is `protected`, so it can be accessed by subclasses of `C`, even if they are in different packages.
+- **Direct Access (`this.message`)**: This works because `S` inherits the `message` field.
+- **Access via `C` instance (`obj.message`)**: This does not work because `obj` is of type `C`, and `S` cannot access the protected member of an instance of the superclass from a different package.
+
+---
+
+### **Dynamic Access Control Rule**:
+
+Java enforces a rule that if an object `obj` is an instance of a superclass `C` and you are accessing a protected member, the **static type** of `obj` must be exactly the subclass type (`S`). If `obj` is of type `C` or another subclass `S2`, accessing the protected member is not allowed.
+
+#### **Example**:
+
+```java
+// packageOne/C.java
+package packageOne;
+
+public class C {
+    protected void method() {
+        System.out.println("C's protected method");
+    }
+}
+
+// packageTwo/S.java
+package packageTwo;
+import packageOne.C;
+
+public class S extends C {
+    public void callMethod(C obj) {
+        // This works, because we're calling the inherited method
+        this.method(); // Allowed
+
+        // This works, because obj is of type S (the current subclass)
+        if (obj instanceof S) {
+            ((S)obj).method(); // Allowed due to explicit casting to subclass type
+        }
+
+        // This doesn't work, because obj is of type C (superclass)
+        // obj.method(); // Compile-time error!
+    }
+}
+```
+
+#### **Explanation**:
+- **`this.method()`**: Works because the subclass `S` inherits the protected method `method()` from class `C`.
+- **`((S)obj).method()`**: Works because `obj` is explicitly cast to `S`, so the static type becomes `S`.
+- **`obj.method()`**: Does not work if `obj` is of type `C`, because access to protected methods is not allowed through superclass references from outside the package.
+
+---
+
+### **Conclusion**:
+- **Protected access** allows subclass inheritance and access within the same package but restricts access through superclass instances from outside the package.
+- The rule for protected access is that it’s only allowed when the object reference is of the subclass type or the class itself. Accessing protected members via superclass instances from a different package is not permitted.
